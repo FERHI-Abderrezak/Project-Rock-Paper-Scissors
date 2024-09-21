@@ -19,124 +19,101 @@
         <a href="#">upgrade your browser</a> to improve your experience.
       </p>
     <![endif]-->
+    <h3>Rock Paper Scissors Game</h3>
+    <button onclick="playRound('rock')" id="rock">Rock</button>
+    <button onclick="playRound('paper')" id="paper">Paper</button>
+    <button onclick="playRound('scissors')" id="scissors">Scissors</button>
+    <p id="computer"></p>
+    <p id="human"></p>
+    <br />
+
+    <hr />
+
+    <p id="roundResult"></p>
+
+    <br />
+
+    <hr />
+    <p id="score"></p>
+    <br />
+    <hr />
+    <p id="output"></p>
 
     <script async defer>
       let humanScore = 0;
       let computerScore = 0;
 
       function getComputerChoice() {
-        let random = Math.random();
-        let Computerchoice;
-        if (random == 0.5) {
-          Computerchoice = "rock";
-        } else if (random < 0.5) {
-          Computerchoice = "paper";
-        } else if (random > 0.5) {
-          Computerchoice = "scissor";
-        }
-
-        console.log("the computer 's choice :" + Computerchoice);
-        return Computerchoice;
+        const choices = ["rock", "paper", "scissors"];
+        const randomIndex = Math.floor(Math.random() * choices.length);
+        const computer = document.getElementById("computer");
+        computer.textContent = "the computer chose " + choices[randomIndex];
+        return choices[randomIndex];
       }
 
-      function getHumanChoice() {
-        let Humanchoice = prompt("What's your choice?");
+      function playRound(humanChoice) {
+        const computerChoice = getComputerChoice();
+        const score = document.getElementById("score");
+        const roundResult = document.getElementById("roundResult");
 
-        switch (Humanchoice) {
-          case "rock":
-            console.log("you have entered rock");
-            break;
-          case "paper":
-            console.log("you have entered paper");
-            break;
-          case "scissor":
-            console.log("you have entered scissors");
-            break;
+        console.log("Human chose: " + humanChoice);
+        const human = document.getElementById("human");
+        computer.textContent = "the computer chose " + humanChoice;
+        console.log("Computer chose: " + computerChoice);
 
-          default:
-            break;
+        if (humanChoice === computerChoice) {
+          console.log("It's a tie!");
+          roundResult.textContent = "It's a tie!";
+        } else if (
+          (humanChoice === "rock" && computerChoice === "scissors") ||
+          (humanChoice === "scissors" && computerChoice === "paper") ||
+          (humanChoice === "paper" && computerChoice === "rock")
+        ) {
+          console.log("You win this round!");
+          roundResult.textContent = "You win this round!";
+
+          humanScore++;
+        } else {
+          console.log("Computer wins this round!");
+          computerScore++;
+          roundResult.textContent = "Computer wins this round!";
         }
 
-        return Humanchoice.toLowerCase();
+        console.log(
+          "Score: Human: " + humanScore + " | Computer: " + computerScore
+        );
+
+        score.textContent =
+          "Score: Human: " + humanScore + " | Computer: " + computerScore;
+
+        checkWinner();
       }
 
-      function playGame() {
-        function playRound(humanChoice, computerChoice) {
-          if (humanChoice === computerChoice) {
-            console.log("no one wins its a tie!!");
-          }
-          if (humanChoice === "rock" && computerChoice === "paper") {
-            console.log(
-              "you lose because you chose " +
-                humanChoice +
-                " and the computer chose" +
-                computerChoice
-            );
-            computerScore++;
-          } else if (humanChoice === "rock" && computerChoice === "scissor") {
-            console.log(
-              "you win because you chose " +
-                humanChoice +
-                " and the computer chose" +
-                computerChoice
-            );
-            humanScore++;
-          } else if (humanChoice === "paper" && computerChoice === "rock") {
-            console.log(
-              "you win because you chose " +
-                humanChoice +
-                " and the computer chose" +
-                computerChoice
-            );
-            humanScore++;
-          } else if (humanChoice === "paper" && computerChoice === "scissor") {
-            console.log(
-              "you lose because you chose " +
-                humanChoice +
-                " and the computer chose" +
-                computerChoice
-            );
-            computerScore++;
-          } else if (humanChoice === "scissor" && computerChoice === "paper") {
-            console.log(
-              "you win because you chose " +
-                humanChoice +
-                " and the computer chose" +
-                computerChoice
-            );
-            humanScore++;
-          } else if (humanChoice === "scissor" && computerChoice === "rock") {
-            console.log(
-              "you lose because you chose " +
-                humanChoice +
-                " and the computer chose" +
-                computerChoice
-            );
-            computerScore++;
-          }
+      function checkWinner() {
+        let resultat;
+        if (humanScore === 3) {
+          console.log("Congratulations! You won the game!");
+          resultat = "Congratulations! You won the game!";
+          output.textContent = resultat;
 
-          console.log(
-            "the score is for human :" +
-              humanScore +
-              " computer:" +
-              computerScore
-          );
-        }
-        for (let index = 0; index < 4; index++) {
-          const humanSelection = getHumanChoice();
-          const computerSelection = getComputerChoice();
-          console.log("round " + index);
-          playRound(humanSelection, computerSelection);
-        }
+          resetGame();
+        } else if (computerScore === 3) {
+          console.log("Sorry, the computer won the game!");
 
-        if (humanScore > computerScore) {
-          console.log(
-            "you win and the score is " + humanScore + ":: " + computerScore
-          );
+          resultat = "Sorry, the computer won the game!";
+          output.textContent = resultat;
+          resetGame();
         }
+        output = document.getElementById("output");
+
+        output.textContent = resultat;
       }
 
-      playGame();
+      function resetGame() {
+        humanScore = 0;
+        computerScore = 0;
+        console.log("The game has been reset.");
+      }
     </script>
   </body>
 </html>
